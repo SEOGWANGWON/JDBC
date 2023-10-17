@@ -21,6 +21,7 @@ JDBC (Java DataBase Connectivity)
                     String password = "비밀번호";
 
                     Class.forName(driver);  -- JDBC 드라이버 클래스를 동적으로 로드하는데 사용 (오래된 방식 필요없음)
-                    Connection con = DriverManager.getConnection(url, user, password);
+                                                               ("주소","계정id","계정pw")     
+                    Connection con = DriverManager.getConnection(url, user, password); -- try/catch 해야함
                     PreparedStatement selectStateMent = con.(preparedStatement(쿼리변수));
                     SesultSet resultSet = selectStateMent.executeQuery();
