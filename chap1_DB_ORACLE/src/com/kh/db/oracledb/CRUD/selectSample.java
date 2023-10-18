@@ -1,4 +1,4 @@
-package com.kh.db.oraclesample;
+package com.kh.db.oracledb.CRUD;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -7,19 +7,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DBConnection {
+public class selectSample {
 
 	public static void main(String[] args) {
-		//selectBank();
-		//selectKhcafe();
-		selectIf();
+		//selectAll();
+		//selectOne();
+		//selectIf();
 		//selectTest();
-		//insertBank();
-		
+		//selectKhcafeJoin();
+		selectJoinTest();
+		//selectIf();
+		//selectTEST();
 		
 
 	}
-	static void selectBank() { // public으로 하면 객체 생성해야하니 static으로 생략
+	static void selectAll() { // public으로 하면 객체 생성해야하니 static으로 생략
 		// 1. 드라이버 연결 : Oracle JDBC 드라이버 클래스 이름
 				String driver = "oracle.jdbc.driver.OracleDriver";
 				// 2. 오라클 내 컴퓨터 연결 : 데이터 베이스 연결 정보
@@ -67,7 +69,7 @@ public class DBConnection {
 					e.printStackTrace();
 				}
 	}
-	static void selectKhcafe() {
+	static void selectOne() {
 		String driver = "oracle.jdbc.driver.OracleDriver";
 		String url = "jdbc:oracle:thin:@localhost:1521:xe";
 		String user = "khcafe";
@@ -117,7 +119,7 @@ public class DBConnection {
 			System.out.println("데이터 베이스 연결 성공!");
 			
 			// WHERE 절 추가하여 조건 추가
-			String selectQuery = "SELECT * FROM BANK WHERE ACCOUNT_ID = ? OR ACCOUNT_ID = ? OR ACCOUNT_ID = ? OR ACCOUNT_ID = ? ORDER BY BALANCE ASC";
+			String selectQuery = "SELECT * FROM BANK WHERE ACCOUNT_ID in(?,?,?,?) ORDER BY ? ASC";
 			PreparedStatement selectState = con.prepareStatement(selectQuery);
 			
 			//String[] targetAN = {"1236777888", "5555666777","이동연","송은희"};
@@ -134,6 +136,8 @@ public class DBConnection {
 			selectState.setInt(2, 5);
 			selectState.setInt(3, 6);
 			selectState.setInt(4, 7);
+			selectState.setString(5, "ACCOUNT_ID");
+			
 			/*
 			 * 조건이 WHERE ACCOUNT_NAME = ? AND BALANCE = ? 일때 (?를 기준으로 생각하면 쉬워 보인다)
 			 * selectState.setInt( "조건인덱스", "조건에 부합하는 찾을 값")
@@ -217,89 +221,118 @@ public class DBConnection {
 			e.printStackTrace();
 		}
 	}
-	static void insertBank() { // insert 는 값을 추출하는게 아니라 삽입하는 것이라 ResultSet(저장 인터페이스) 을 쓸 필요가없다.
+
 							   // executeQuery(반환)
-		
-		//안보고 쓴거
+	static void selectKhcafeJoin() {
 		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		String user = "khbank";
-		String password = "khbank";
+		String user = "khcafe";
+		String password = "khcafe";
 		Connection con;
 		
-		try {
-			con = DriverManager.getConnection(url,user,password);
-			String insertQuery = "INSERT INTO BANK (account_id, account_number, account_name, balance, branch_name, last_transaction_date)"
-								+"VALUES(?, ?, ?, ?, ?, ?)";
+			try {
+				con = DriverManager.getConnection(url,user,password);
+				String SelectJoinQuery = "SELECT ?, ? FROM CAFES C JOIN MENU M ON C.CAFE_ID = M.CAFE_ID"
+						+ " ORDER BY ? ASC";
+				PreparedStatement SelectState = con.prepareStatement(SelectJoinQuery);
+				
+				
+				SelectState.setString(1, "C.CNAME");
+				SelectState.setString(2, "M.MENU_NAME");
+				SelectState.setString(3, "C.CAFE_ID");
+				
+				System.out.println("저장 성공");
+				ResultSet result = SelectState.executeQuery();
+				
+				while(result.next()) {
+					System.out.println("들어왔따");
+					String cafeName = result.getString("CNAME");
+					System.out.println("첫번째꺼 출력");
+					String cafeMenu = result.getString("MENU_NAME");
+					
+					System.out.println("CNAME : " + cafeName + ", MENU_NAME : " + cafeMenu);
+				}
+				SelectState.close();
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				System.out.println("실패");
+				e.printStackTrace();
+			}
 			
-			PreparedStatement insertState = con.prepareStatement(insertQuery);
-			
-			insertState.setInt(1, 15);
-			insertState.setString(2, "2873846764");
-			insertState.setString(3, "김순신");
-			insertState.setDouble(4, 899999999.99);
-			insertState.setString(5, "부여성 왼쪽입구");
-			insertState.setDate(6, Date.valueOf("1570-10-17"));
-			
-			int rowsupdate = insertState.executeUpdate();
-			System.out.println(rowsupdate + " row 추가됨");
-			
-			
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		/*
-		강사님이 쳐준거 
-		
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		String user = "khbank";
-		String password = "khbank";
-		Connection con = null;
-		try {
-			con = DriverManager.getConnection(url,user,password);
-			String insertQuery = "INSERT INTO BANK (account_id, account_number, account_name, balance, branch_name, last_transaction_date)"
-								+"VALUES (?,?,?,?,?,?)";
-			PreparedStatement insertState = con.prepareStatement(insertQuery);
-			insertState.setInt(1, 13);
-			insertState.setString(2, "203284619");
-			insertState.setString(3, "김옥순");
-			insertState.setDouble(4, 77777.77);
-			insertState.setString(5, "태평양");
-			insertState.setDate(6, Date.valueOf("2023-10-16"));
-			
-			int rowsInsert = insertState.executeUpdate();
-			System.out.println(rowsInsert + " row 추가됨");
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	*/
 	}
-	
+	static void selectJoinTest() {
+		String url = "jdbc:oracle:thin:@localhost:1521:xe";
+		String user = "khcafe";
+		String password = "khcafe";
+		Connection con;
+		String sel = "C.CNAME, M.MENU_NAME";
+			try {
+				con = DriverManager.getConnection(url,user,password);
+				
+				String SelectJoinQuery = "SELECT " + sel + " FROM CAFES C JOIN MENU M ON"
+						+ " C.CAFE_ID = M.CAFE_ID ORDER BY ? ASC";
+				PreparedStatement SelectState = con.prepareStatement(SelectJoinQuery);
+				
+				
+				SelectState.setString(1, "CAFE_ID");
+				
+				
+				System.out.println("저장 성공");
+				ResultSet result = SelectState.executeQuery();
+				
+				while(result.next()) {
+					String cafeName = result.getString("CNAME");
+					String cafeMenu = result.getString("MENU_NAME");
+					System.out.println();
+					
+					System.out.println("CNAME : " + cafeName + ", MENU_NAME : " + cafeMenu);
+				}
+				SelectState.close();
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				System.out.println("실패");
+				e.printStackTrace();
+			}
+		
+	}
+	static void selectTEST() {
+		String url = "jdbc:oracle:thin:@localhost:1521:xe";
+		String user = "khcafe";
+		String password = "khcafe";
+		Connection con;
+		String hi = "CNAME";
+			try {
+				con = DriverManager.getConnection(url,user,password);
+				String SelectJoinQuery = "SELECT "+ hi +" FROM CAFES"
+						+ " ORDER BY ? ASC";
+				PreparedStatement SelectState = con.prepareStatement(SelectJoinQuery);
+				
+				
+				SelectState.setString(1, " CNAME ");
+				
+				
+				
+				System.out.println("저장 성공");
+				ResultSet result = SelectState.executeQuery();
+				
+				while(result.next()) {
+					System.out.println("들어왔따");
+					String cafeName = result.getString("CNAME");
+					
+					
+					System.out.println("CNAME : " + cafeName);
+				}
+				SelectState.close();
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				System.out.println("실패");
+				e.printStackTrace();
+			}
+	}
 }

@@ -22,6 +22,8 @@ Connection con = DriverManager.getConnection(jdbcurl,유저명,유저비밀번호);
 // 쿼리의 경우 "" 글자문을 넣기 때문에 String 을 사용
 String selectQuery = "SELECT  * FROM 테이블명";
 							//ORDER BY 나 WHERE 절 추가 가능
+							//이유는 모르겟으나 select 문에 ? 로 조건이 넣어지지 않음
+							
 
 //PreparedStatement 를 사용하여 sql 쿼리를 실행할 준비
 PreparedStatement ps = con.preparedStatement(selectQuery);
@@ -51,3 +53,19 @@ ResultSet에 담은 결과 집합을 next()를 사용하여 확인
 		} catch(){
 			try-catch 블록을 사용하여 쿼리 실행 중 발생할 수 있는 예외 처리
 		}
+		
+		? 조건 넣을떄 팁 : WHERE ? ,? 이렇게 조건을 넣을때 굳이 여러개 할필요없이 in(?,?,?) 이렇게 넣어주면된다
+		
+		향상된 select 문 : 출력메소드를 따로 만들어서 메서드(값,값) 이렇게 값만 넣어주면 되게 할수있따.
+				메서드 예제코드 )
+					// throws SQLException 를 써주지 않으면 트라이 캐치 문구가 뜸
+					static void insertPSM(PreparedStatement ps, int cafe_id, String cname, String address, 
+										String phone_number, String operating_hours) throws SQLException{
+						ps.setInt(1, cafe_id);
+						ps.setString(2, cname);
+						ps.setString(3, address);
+						ps.setString(4, phone_number);
+						ps.setString(5, operating_hours);
+						int rowsUpdate = ps.executeUpdate();
+						System.out.println(rowsUpdate + "행 삽입 완료!");
+	}
