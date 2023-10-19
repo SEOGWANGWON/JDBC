@@ -14,8 +14,8 @@ public class selectSample {
 		//selectOne();
 		//selectIf();
 		//selectTest();
-		//selectKhcafeJoin();
-		selectJoinTest();
+		selectKhcafeJoin();
+		//selectJoinTest();
 		//selectIf();
 		//selectTEST();
 		
@@ -223,7 +223,7 @@ public class selectSample {
 	}
 
 							   // executeQuery(반환)
-	static void selectKhcafeJoin() {
+	static void selectKhcafeJoin() { // select 가 안되는이유를 모르겟당
 		String url = "jdbc:oracle:thin:@localhost:1521:xe";
 		String user = "khcafe";
 		String password = "khcafe";
@@ -231,17 +231,18 @@ public class selectSample {
 		
 			try {
 				con = DriverManager.getConnection(url,user,password);
-				String SelectJoinQuery = "SELECT ?, ? FROM CAFES C JOIN MENU M ON C.CAFE_ID = M.CAFE_ID"
-						+ " ORDER BY ? ASC";
+				String SelectJoinQuery = "SELECT * FROM OLDCAFE C JOIN OLDMENU M ON C.CAFE_ID = M.CAFE_ID "
+						+ " ORDER BY  ?  ASC";
 				PreparedStatement SelectState = con.prepareStatement(SelectJoinQuery);
 				
 				
-				SelectState.setString(1, "C.CNAME");
-				SelectState.setString(2, "M.MENU_NAME");
-				SelectState.setString(3, "C.CAFE_ID");
+				//SelectState.setString(1, "C.CNAME");
+				//SelectState.setString(2, "M.MENU_NAME");
+				SelectState.setString(1, "C.CAFE_ID");
 				
-				System.out.println("저장 성공");
+				
 				ResultSet result = SelectState.executeQuery();
+				System.out.println("저장 성공");
 				
 				while(result.next()) {
 					System.out.println("들어왔따");
@@ -256,7 +257,8 @@ public class selectSample {
 				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				System.out.println("실패");
+				
+				System.out.println("실패: " + e.getMessage());
 				e.printStackTrace();
 			}
 			
