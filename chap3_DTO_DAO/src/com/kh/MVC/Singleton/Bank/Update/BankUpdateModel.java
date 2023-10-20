@@ -38,7 +38,7 @@ public class BankUpdateModel {
 			System.out.println("***금액 변경***");
 			st.setInt(2, bankDTO.getAccountId());
 			System.out.println("***변경하는 통장ID***");
-			int rowsAffected = st.executeUpdate();
+			int rowsAffected = st.executeUpdate();  // 이새끼 안된이유 Oracle 에 코드가 있어서 (지운거 커밋안함)
 			System.out.println("***저장완료***");
 			return rowsAffected > 0;
 			
