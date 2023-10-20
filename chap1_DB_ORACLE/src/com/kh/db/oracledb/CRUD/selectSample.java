@@ -231,6 +231,9 @@ public class selectSample {
 		
 			try {
 				con = DriverManager.getConnection(url,user,password);
+				// SELECT에 조건이 넣어지지 않는이유는 굳이 쓰지 않아도 돼서
+				// select * 해놓고 while문에서 뽑아쓰면 되기 때문에 아예 select 조건을 읽는
+				// 메서드나 버프드안에 있는 기능이 없는듯함. (궁금증 해결!)
 				String SelectJoinQuery = "SELECT * FROM OLDCAFE C JOIN OLDMENU M ON C.CAFE_ID = M.CAFE_ID "
 						+ " ORDER BY  ?  ASC";
 				PreparedStatement SelectState = con.prepareStatement(SelectJoinQuery);
