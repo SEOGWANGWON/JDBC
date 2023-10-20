@@ -74,7 +74,7 @@ public class cafeModel{
 	public void deleteCafe(int cafeid) {
 		try {
 			Connection con = DriverManager.getConnection(url, username, password);
-			String sql = "DELETE FROM cafes WHERE cafe _id = ?";
+			String sql = "DELETE FROM oldcafe WHERE cafe _id = ?";
 			
 			PreparedStatement st = con.prepareStatement(sql);
 			
@@ -89,7 +89,7 @@ public class cafeModel{
 	public void deleteMenu(int menuId) {
 		try {
 			Connection con = DriverManager.getConnection(url,username,password);
-			String sql = "DELETE FROM MENU WHERE MENU_ID = ?";
+			String sql = "DELETE FROM oldMENU WHERE MENU_ID = ?";
 			
 			PreparedStatement st = con.prepareStatement(sql);
 			
