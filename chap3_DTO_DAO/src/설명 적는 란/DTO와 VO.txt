@@ -4,7 +4,8 @@ DTO (Data Transfer Object) :
 	주로 외부 시스템과 상호작용할 때 데이터를 전달하고 전송하는데 사용
 	데이터전송을 위한 필드만 포함하고, 비즈니스 로직을 가지지 않는 경우가 많음
 
-
+MVC 패턴 순서
+DTO -> DAO (Model) -> View -> Controller (Service) -> Main(최종실행)
 
 
 VO (Value Object) :
